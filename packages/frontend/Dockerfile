@@ -9,6 +9,7 @@ RUN pnpm install
 # Receber URL da API em tempo de build (necessário para Next.js embutir no bundle)
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV STANDALONE=true
 
 # Copiar código e buildar
 COPY . .

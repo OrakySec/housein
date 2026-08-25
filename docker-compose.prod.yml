@@ -53,11 +53,11 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=YkaroNET"
-        - "traefik.http.routers.qa-minio.rule=Host(`storage.${DOMAIN}`)"
-        - "traefik.http.routers.qa-minio.entrypoints=websecure"
-        - "traefik.http.routers.qa-minio.tls.certresolver=letsencryptresolver"
-        - "traefik.http.routers.qa-minio.service=qa-minio"
-        - "traefik.http.services.qa-minio.loadbalancer.server.port=9000"
+        - "traefik.http.routers.housein-minio.rule=Host(`storage.${DOMAIN}`)"
+        - "traefik.http.routers.housein-minio.entrypoints=websecure"
+        - "traefik.http.routers.housein-minio.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.housein-minio.service=housein-minio"
+        - "traefik.http.services.housein-minio.loadbalancer.server.port=9000"
 
   minio-init:
     image: minio/mc
@@ -76,7 +76,7 @@ services:
 
   # ─── Backend (Fastify) ────────────────────────────────────────
   backend:
-    image: ghcr.io/orakysec/qa-backend:latest
+    image: ghcr.io/orakysec/housein-backend:latest
     healthcheck:
       test: [ "CMD-SHELL", "wget -qO- http://127.0.0.1:3001/health || exit 1" ]
       interval: 15s
@@ -111,14 +111,14 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=YkaroNET"
-        - "traefik.http.routers.qa-backend.rule=Host(`api.${DOMAIN}`)"
-        - "traefik.http.routers.qa-backend.entrypoints=websecure"
-        - "traefik.http.routers.qa-backend.tls.certresolver=letsencryptresolver"
-        - "traefik.http.services.qa-backend.loadbalancer.server.port=3001"
+        - "traefik.http.routers.housein-backend.rule=Host(`api.${DOMAIN}`)"
+        - "traefik.http.routers.housein-backend.entrypoints=websecure"
+        - "traefik.http.routers.housein-backend.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.housein-backend.loadbalancer.server.port=3001"
 
   # ─── Frontend (Next.js) ───────────────────────────────────────
   frontend:
-    image: ghcr.io/orakysec/qa-frontend:latest
+    image: ghcr.io/orakysec/housein-frontend:latest
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_SITE_URL: https://${DOMAIN}
@@ -130,12 +130,12 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=YkaroNET"
-        - "traefik.http.routers.qa-frontend.rule=Host(`${DOMAIN}`)"
-        - "traefik.http.routers.qa-frontend.entrypoints=websecure"
-        - "traefik.http.routers.qa-frontend.tls=true"
-        - "traefik.http.routers.qa-frontend.tls.certresolver=letsencryptresolver"
-        - "traefik.http.routers.qa-frontend.tls.domains[0].main=${DOMAIN}"
-        - "traefik.http.services.qa-frontend.loadbalancer.server.port=3000"
+        - "traefik.http.routers.housein-frontend.rule=Host(`${DOMAIN}`)"
+        - "traefik.http.routers.housein-frontend.entrypoints=websecure"
+        - "traefik.http.routers.housein-frontend.tls=true"
+        - "traefik.http.routers.housein-frontend.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.housein-frontend.tls.domains[0].main=${DOMAIN}"
+        - "traefik.http.services.housein-frontend.loadbalancer.server.port=3000"
 
   # ─── Watchtower (auto-update de imagens) ─────────────────────
   watchtower:
@@ -144,7 +144,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json:ro
-    command: --interval 300 --cleanup queiroz-almeida_backend queiroz-almeida_frontend
+    command: --interval 300 --cleanup housein_backend housein_frontend
     networks:
       - internal
 
