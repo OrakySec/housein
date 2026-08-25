@@ -1,0 +1,123 @@
+'use client'
+import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
+import { X, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import { useLeadModal } from '@/context/LeadModalContext'
+
+const links = [
+  { label: 'Home', href: '/' },
+  { label: 'Empresa', href: '/#empresa' },
+  { label: 'Empreendimentos', href: '/empreendimentos' },
+  { label: 'Contato', href: '#contato', isContact: true },
+]
+
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+  exit: { transition: { staggerChildren: 0.05, staggerDirection: -1 } },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  exit: { opacity: 0, x: -10, transition: { duration: 0.3 } },
+}
+
+interface Props {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export function MobileMenu({ isOpen, onClose }: Props) {
+  const { open: openLead } = useLeadModal()
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+          className="fixed inset-0 z-[60] bg-brand-dark flex flex-col overflow-hidden"
+        >
+          {/* Blueprint Overlay */}
+          <div className="absolute inset-0 bg-blueprint opacity-[0.05] pointer-events-none" />
+
+          {/* Header */}
+          <div className="relative z-10 flex items-center justify-between px-8 h-24">
+            <Image 
+              src="/logo-white.png?v=3" 
+              alt="HouseIN Incorporações" 
+              width={160} 
+              height={60}
+              className="w-36 md:w-40 h-auto object-contain"
+            />
+            <button
+              onClick={onClose}
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 text-white hover:bg-brand-marinho transition-all"
+              aria-label="Fechar"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* Links */}
+          <motion.nav
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            className="relative z-10 flex flex-col justify-center flex-1 px-8 py-12"
+          >
+            <div className="space-y-4">
+              {links.map((link) => (
+                <motion.div key={link.href} variants={itemVariants}>
+                  {link.isContact ? (
+                    <button
+                      onClick={() => { onClose(); openLead() }}
+                      className="w-full group flex items-center justify-between py-4 border-b border-white/5 text-left"
+                    >
+                      <span className="font-serif text-4xl font-bold text-white group-hover:text-brand-marinho-glow transition-colors">
+                        {link.label}
+                      </span>
+                      <ArrowRight size={24} className="text-brand-marinho-glow opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" />
+                    </button>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      onClick={onClose}
+                      className="group flex items-center justify-between py-4 border-b border-white/5"
+                    >
+                      <span className="font-serif text-4xl font-bold text-white group-hover:text-brand-marinho-glow transition-colors">
+                        {link.label}
+                      </span>
+                      <ArrowRight size={24} className="text-brand-marinho-glow opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" />
+                    </Link>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div variants={itemVariants} className="mt-16">
+              <button
+                onClick={() => { onClose(); openLead() }}
+                className="shimmer-button w-full bg-brand-marinho text-white font-sans font-bold text-xs uppercase tracking-[0.2em] py-5 rounded-full"
+              >
+                Conheça nossos projetos
+              </button>
+            </motion.div>
+          </motion.nav>
+
+          {/* Decorative Bottom */}
+          <div className="relative z-10 p-8 border-t border-white/5">
+            <p className="font-sans text-[10px] text-brand-silver/30 font-bold uppercase tracking-[0.3em] text-center">
+              © HouseIN Incorporações · Solidez e Inteligência Imobiliária
+            </p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
