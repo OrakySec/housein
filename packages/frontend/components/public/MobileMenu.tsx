@@ -40,15 +40,12 @@ export function MobileMenu({ isOpen, onClose }: Props) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="fixed inset-0 z-[60] bg-brand-dark flex flex-col overflow-hidden"
+          className="fixed inset-0 z-[60] bg-slate-950/98 backdrop-blur-2xl flex flex-col overflow-hidden"
         >
-          {/* Blueprint Overlay */}
-          <div className="absolute inset-0 bg-blueprint opacity-[0.05] pointer-events-none" />
-
           {/* Header */}
           <div className="relative z-10 flex items-center justify-between px-8 h-24">
             <Image 
-              src="/logo-white.png?v=3" 
+              src="/logo-white.png?v=4" 
               alt="HouseIN Incorporações" 
               width={160} 
               height={60}
@@ -56,10 +53,10 @@ export function MobileMenu({ isOpen, onClose }: Props) {
             />
             <button
               onClick={onClose}
-              className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 text-white hover:bg-brand-marinho transition-all"
+              className="w-11 h-11 flex items-center justify-center rounded-2xl bg-white/10 text-white hover:bg-brand-marinho transition-all"
               aria-label="Fechar"
             >
-              <X size={24} />
+              <X size={22} />
             </button>
           </div>
 
@@ -77,33 +74,33 @@ export function MobileMenu({ isOpen, onClose }: Props) {
                   {link.isContact ? (
                     <button
                       onClick={() => { onClose(); openLead() }}
-                      className="w-full group flex items-center justify-between py-4 border-b border-white/5 text-left"
+                      className="w-full group flex items-center justify-between py-4 border-b border-white/10 text-left"
                     >
-                      <span className="font-serif text-4xl font-bold text-white group-hover:text-brand-marinho-glow transition-colors">
+                      <span className="font-serif text-3xl md:text-4xl font-bold text-white group-hover:text-brand-marinho-glow transition-colors">
                         {link.label}
                       </span>
-                      <ArrowRight size={24} className="text-brand-marinho-glow opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" />
+                      <ArrowRight size={22} className="text-brand-marinho-glow opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" />
                     </button>
                   ) : (
                     <Link
                       href={link.href}
                       onClick={onClose}
-                      className="group flex items-center justify-between py-4 border-b border-white/5"
+                      className="group flex items-center justify-between py-4 border-b border-white/10"
                     >
-                      <span className="font-serif text-4xl font-bold text-white group-hover:text-brand-marinho-glow transition-colors">
+                      <span className="font-serif text-3xl md:text-4xl font-bold text-white group-hover:text-brand-marinho-glow transition-colors">
                         {link.label}
                       </span>
-                      <ArrowRight size={24} className="text-brand-marinho-glow opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" />
+                      <ArrowRight size={22} className="text-brand-marinho-glow opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" />
                     </Link>
                   )}
                 </motion.div>
               ))}
             </div>
 
-            <motion.div variants={itemVariants} className="mt-16">
+            <motion.div variants={itemVariants} className="mt-12">
               <button
                 onClick={() => { onClose(); openLead() }}
-                className="shimmer-button w-full bg-brand-marinho text-white font-sans font-bold text-xs uppercase tracking-[0.2em] py-5 rounded-full"
+                className="w-full bg-brand-marinho hover:bg-brand-marinho/90 text-white font-sans font-bold text-xs uppercase tracking-[0.18em] py-4 rounded-2xl shadow-xl shadow-brand-marinho/30"
               >
                 Conheça nossos projetos
               </button>

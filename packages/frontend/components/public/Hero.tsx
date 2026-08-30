@@ -1,21 +1,11 @@
 'use client'
 import { useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, Play, MapPin } from 'lucide-react'
+import { ArrowRight, Compass, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { useLeadModal } from '@/context/LeadModalContext'
-import type { Empreendimento } from '@/types'
 
-const locations = [
-  { city: 'Porto de Galinhas', state: 'PE' },
-  { city: 'Maragogi', state: 'AL' },
-]
-
-interface HeroProps {
-  destaque?: Empreendimento | null
-}
-
-export function Hero({ destaque }: HeroProps) {
+export function Hero() {
   const { open: openLead } = useLeadModal()
   const containerRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -25,9 +15,9 @@ export function Hero({ destaque }: HeroProps) {
     offset: ['start start', 'end start'],
   })
 
-  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
+  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '15%'])
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.05])
 
   // Force play on mobile/safari
   useEffect(() => {
@@ -39,157 +29,100 @@ export function Hero({ destaque }: HeroProps) {
   }, [])
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex flex-col overflow-hidden bg-brand-dark">
+    <section ref={containerRef} className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-slate-950">
       
-      {/* Cinematic Background */}
+      {/* Cinematic Background Video com iluminação oceânica natural */}
       <motion.div className="absolute inset-0 z-0" style={{ y: videoY, scale }}>
         <video
           ref={videoRef}
           autoPlay muted loop playsInline preload="auto"
-          className="absolute inset-0 w-full h-full object-cover grayscale-[20%] contrast-[1.1]"
+          className="absolute inset-0 w-full h-full object-cover contrast-[1.05]"
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
         
-        {/* Layered Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent" />
-        <div className="absolute inset-0 bg-noise opacity-[0.02] pointer-events-none" />
+        {/* Layered Overlays Sofisticados e Arejados */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
       </motion.div>
 
       {/* Main Content */}
       <motion.div
         style={{ opacity }}
-        className="relative z-10 flex-1 flex flex-col justify-center max-w-7xl mx-auto px-6 lg:px-12 w-full pt-36 pb-20"
+        className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full pt-32 pb-24 flex flex-col justify-center"
       >
-        <div className="max-w-4xl">
-          {/* Location Eyebrow */}
+        <div className="max-w-3xl">
+          
+          {/* Badge Selo de Boutique Litorânea */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-wrap items-center gap-2.5 mb-8"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="inline-flex items-center gap-2.5 px-4 md:px-5 py-2.5 rounded-2xl bg-white/15 backdrop-blur-xl border border-white/20 text-white shadow-xl mb-8"
           >
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-4 py-2">
-              <MapPin size={12} className="text-brand-marinho" />
-              <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-white">
-                Porto de Galinhas, PE
-              </span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-4 py-2">
-              <MapPin size={12} className="text-brand-marinho" />
-              <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-white">
-                Tamandaré, PE
-              </span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-4 py-2">
-              <MapPin size={12} className="text-brand-marinho" />
-              <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-white">
-                Maragogi, AL
-              </span>
-            </div>
+            <Sparkles size={14} className="text-brand-marinho-glow" />
+            <span className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.22em] text-white">
+              Boutique de Empreendimentos Litorâneos · PE & AL
+            </span>
           </motion.div>
 
-          {/* Headline */}
-          <div className="relative mb-6">
+          {/* Headline Imponente */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.4 }}
+            className="relative mb-6"
+          >
             <h1
-              className="font-serif font-bold text-white leading-[1.05] tracking-tight text-balance"
-              style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4.8rem)' }}
+              className="font-serif font-bold text-white leading-[1.08] tracking-tight text-balance"
+              style={{ fontSize: 'clamp(2.4rem, 5.6vw, 4.6rem)' }}
             >
-              Empreendimentos compactos nos litorais que{' '}
-              <em className="not-italic text-brand-marinho">mais valorizam o Brasil.</em>
+              A arte de viver e investir nos destinos mais{' '}
+              <span className="text-brand-marinho-glow italic font-normal">
+                desejados do litoral.
+              </span>
             </h1>
-          </div>
+          </motion.div>
 
           {/* Subheadline */}
-          <p className="font-sans text-base md:text-xl text-white/90 leading-relaxed mb-10 max-w-2xl">
-            Solidez, visão e inteligência imobiliária conectando arquitetura de alto padrão à máxima rentabilidade no litoral.
-          </p>
-
-          {/* Actions */}
-          <motion.div
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-wrap items-center gap-5"
+            className="font-sans text-base md:text-xl text-white/90 leading-relaxed mb-10 max-w-2xl font-light"
+          >
+            Empreendimentos compactos de alto padrão conectando arquitetura autoral, solidez construtiva e máxima rentabilidade em Porto de Galinhas, Tamandaré e Maragogi.
+          </motion.p>
+
+          {/* Actions com Cantos Lapidados */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="flex flex-wrap items-center gap-4"
           >
             <Link
               href="/empreendimentos"
-              className="shimmer-button bg-brand-marinho text-white font-sans text-xs font-bold uppercase tracking-[0.2em] px-8 py-4 md:py-5 rounded-full hover:bg-brand-marinho/90 transition-all flex items-center gap-3 shadow-xl shadow-brand-marinho/30 hover:scale-105 active:scale-95 group"
+              className="inline-flex items-center gap-3 bg-brand-marinho hover:bg-brand-marinho/90 text-white font-sans text-xs font-bold uppercase tracking-[0.16em] px-8 py-4.5 rounded-2xl transition-all shadow-xl shadow-brand-marinho/30 hover:shadow-brand-marinho/50 hover:-translate-y-0.5 group"
             >
-              Conheça nossos projetos
-              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              Explorar Empreendimentos
+              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
             </Link>
 
             <button
               onClick={() => openLead()}
-              className="flex items-center gap-3.5 group text-white/90 hover:text-white transition-colors"
+              className="inline-flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/25 text-white font-sans text-xs font-bold uppercase tracking-[0.16em] px-7 py-4.5 rounded-2xl transition-all hover:-translate-y-0.5"
             >
-              <div className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center transition-all group-hover:border-brand-marinho group-hover:scale-110 group-hover:bg-brand-marinho/20">
-                <Play size={13} className="fill-white translate-x-0.5" />
-              </div>
-              <span className="font-sans text-[11px] font-bold uppercase tracking-widest">Falar com especialista</span>
+              <Compass size={15} className="text-brand-marinho-glow" />
+              Falar com Consultor
             </button>
           </motion.div>
+
         </div>
       </motion.div>
 
-      {/* Founding Credibility Bar */}
-      <motion.div
-        initial={{ y: 40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 1.4 }}
-        className="relative z-10 border-t border-white/10 bg-black/20 backdrop-blur-md"
-      >
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-5">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 items-center text-center">
-            <div className="flex items-center justify-center gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-brand-marinho animate-pulse shrink-0" />
-              <span className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
-                Alto Padrão no Litoral
-              </span>
-            </div>
-            
-            <div className="flex items-center justify-center">
-              <span className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-white/85">
-                Felipe Zaidan & Roberto Padilha
-              </span>
-            </div>
-
-            <div className="flex items-center justify-center">
-              <span className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-white/85">
-                Inteligência Construtiva
-              </span>
-            </div>
-
-            <div className="flex items-center justify-center gap-2.5">
-              <span className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
-                100% Foco no Litoral
-              </span>
-              <div className="w-1.5 h-1.5 rounded-full bg-brand-marinho shrink-0" />
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5 }}
-        className="absolute bottom-28 right-12 z-10 hidden xl:flex flex-col items-center gap-4"
-      >
-        <div className="h-20 w-px bg-gradient-to-b from-brand-marinho-glow to-transparent" />
-        <span
-          className="font-sans text-[8px] text-brand-marinho-glow font-bold uppercase tracking-[0.4em]"
-          style={{ writingMode: 'vertical-rl' }}
-        >
-          Scroll
-        </span>
-      </motion.div>
-
-      {/* Blueprint */}
-      <div className="absolute inset-0 bg-blueprint opacity-[0.03] pointer-events-none z-[1]" />
+      {/* Transição suave e elegante para a próxima seção */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/40 to-transparent pointer-events-none z-10" />
     </section>
   )
 }
