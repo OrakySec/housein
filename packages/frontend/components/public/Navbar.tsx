@@ -28,8 +28,8 @@ export function Navbar() {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled 
-            ? 'bg-white/95 backdrop-blur-xl border-b border-slate-200/80 py-3.5 md:py-4 shadow-sm' 
-            : 'bg-gradient-to-b from-black/70 via-black/25 to-transparent border-b border-white/10 py-5 md:py-7'
+            ? 'bg-white/95 backdrop-blur-xl py-3.5 md:py-4 shadow-sm' 
+            : 'bg-gradient-to-b from-black/70 via-black/25 to-transparent py-5 md:py-7'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full flex items-center justify-between">
