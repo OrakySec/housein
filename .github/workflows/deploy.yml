@@ -73,7 +73,7 @@ jobs:
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
           build-args: |
-            NEXT_PUBLIC_API_URL=https://api.${{ secrets.DOMAIN || 'houseincorporacoes.com.br' }}
+            NEXT_PUBLIC_API_URL=https://api.${{ secrets.DOMAIN || 'houseincorporadora.com.br' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
