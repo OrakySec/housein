@@ -70,15 +70,6 @@ export function QuemSomos() {
 
           {/* Narrativa Única e Integrada */}
           <div className="space-y-6">
-            <div>
-              <h3 className="font-serif font-bold text-slate-900 text-2xl md:text-4xl leading-snug">
-                Felipe Zaidan & Roberto Padilha
-              </h3>
-              <p className="font-sans text-xs md:text-sm font-semibold uppercase tracking-wider text-brand-marinho mt-2">
-                Estratégia Comercial, Produto & Digital · Engenharia, Operações & Rigor Construtivo
-              </p>
-            </div>
-
             <p className="font-sans text-slate-700 text-base md:text-lg leading-relaxed">
               A <strong>HouseIN</strong> consolida a união de mais de 35 anos de experiência somada de seus fundadores: de um lado, a visão estratégica de <strong>Felipe Zaidan</strong> (11+ anos) voltada ao comportamento do investidor contemporâneo, inteligência digital e concepção de produtos imobiliários formatados para alta rentabilidade e locação por temporada; do outro, o rigor técnico e a solidez operacional de <strong>Roberto Padilha</strong> (24+ anos) na construção civil, assegurando excelência executiva, segurança estrutural e cumprimento rigoroso de cronogramas.
             </p>
