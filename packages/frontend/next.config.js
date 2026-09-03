@@ -12,7 +12,7 @@ const nextConfig = {
       // dev local
       { protocol: 'http', hostname: 'localhost', port: '9000', pathname: '/**' },
       // domínios de produção e homologação
-      { protocol: 'https', hostname: '*.houseincorporacoes.com.br', pathname: '/**' },
+      { protocol: 'https', hostname: '*.houseincorporadora.com.br', pathname: '/**' },
       { protocol: 'https', hostname: '*.housein.com.br', pathname: '/**' },
       { protocol: 'https', hostname: '*.ykaromarques.com', pathname: '/**' },
       { protocol: 'https', hostname: 'storage.teste.ykaromarques.com', pathname: '/**' },
