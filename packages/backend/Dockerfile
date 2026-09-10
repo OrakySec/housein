@@ -3,7 +3,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Instalar dependências
-COPY package.json ./
+COPY package.json pnpm-workspace.yaml ./
 RUN pnpm install
 
 # Gerar Prisma Client e buildar

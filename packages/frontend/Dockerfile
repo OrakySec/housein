@@ -3,7 +3,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Instalar dependências
-COPY package.json ./
+COPY package.json pnpm-workspace.yaml ./
 RUN pnpm install
 
 # Receber URL da API em tempo de build (necessário para Next.js embutir no bundle)
