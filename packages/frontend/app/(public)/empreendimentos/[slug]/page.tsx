@@ -88,7 +88,7 @@ export default async function EmpreendimentoPage({
     { icon: BedDouble, label: 'Quartos', value: faixa(e.quartos_min, e.quartos_max) },
     { icon: Bath,      label: 'Suítes',  value: faixa(e.suites_min, e.suites_max) },
     { icon: Car,       label: 'Vagas',   value: e.vagas_tipo === 'ROTATIVA' ? 'Rotativa' : faixa(e.vagas_min, e.vagas_max) },
-    { icon: Building2, label: 'Unidades', value: e.total_unidades?.toString() ?? null },
+    { icon: Building2, label: 'Vendido', value: e.percentual_vendido != null ? `${e.percentual_vendido}%` : null },
     { icon: TrendingUp, label: 'Progresso', value: e.progresso > 0 ? `${e.progresso}%` : null },
   ].filter(s => s.value)
 
@@ -104,9 +104,7 @@ export default async function EmpreendimentoPage({
     faixa(e.area_min, e.area_max, ' m²') && { label: 'Área privativa', value: faixa(e.area_min, e.area_max, ' m²')! },
     e.num_torres             && { label: 'Torres',           value: String(e.num_torres) },
     e.num_andares            && { label: 'Andares',          value: String(e.num_andares) },
-    e.total_unidades         && { label: 'Total de unidades', value: String(e.total_unidades) },
-    e.unidades_disponiveis != null && e.unidades_disponiveis !== undefined
-      ? { label: 'Unidades disponíveis', value: String(e.unidades_disponiveis) } : null,
+    e.percentual_vendido != null && { label: 'Total vendido', value: `${e.percentual_vendido}%` },
     formatDate(e.data_entrega) && { label: 'Previsão de entrega', value: formatDate(e.data_entrega)! },
     e.cidade                 && { label: 'Cidade',           value: [e.cidade, e.estado].filter(Boolean).join(' – ') },
     e.bairro                 && { label: 'Bairro',           value: e.bairro },

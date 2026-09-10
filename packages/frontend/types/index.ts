@@ -31,8 +31,7 @@ export interface Empreendimento {
   area_max?: number
   preco_min?: number
   preco_max?: number
-  total_unidades?: number
-  unidades_disponiveis?: number
+  percentual_vendido?: number
   data_inicio?: string
   data_entrega?: string
   whatsapp?: string

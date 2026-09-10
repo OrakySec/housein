@@ -41,8 +41,7 @@ const schema = z.object({
   areaMax: optNum,
   precoMin: optNum,
   precoMax: optNum,
-  totalUnidades: z.preprocess(emptyToUndef, z.coerce.number().int().positive().optional()),
-  unidadesDisponiveis: z.preprocess(emptyToUndef, z.coerce.number().int().min(0).optional()),
+  percentualVendido: z.preprocess(emptyToUndef, z.coerce.number().min(0).max(100).optional()),
   percentualObra: z.preprocess(emptyToUndef, z.coerce.number().min(0).max(100).optional()),
   dataInicio: z.string().optional(),
   dataEntrega: z.string().optional(),
@@ -394,11 +393,8 @@ export function EmpreendimentoForm({ initialData, mode }: Props) {
             <Field label="Preço Máx. (R$)" error={errors.precoMax?.message}>
               <input {...register('precoMax')} type="number" className={input()} placeholder="650000" />
             </Field>
-            <Field label="Total de Unidades" error={errors.totalUnidades?.message}>
-              <input {...register('totalUnidades')} type="number" className={input()} placeholder="120" />
-            </Field>
-            <Field label="Unidades Disponíveis" error={errors.unidadesDisponiveis?.message}>
-              <input {...register('unidadesDisponiveis')} type="number" className={input()} placeholder="48" />
+            <Field label="Total Vendido (%)" error={errors.percentualVendido?.message}>
+              <input {...register('percentualVendido')} type="number" min={0} max={100} className={input()} placeholder="40" />
             </Field>
             <Field label="Evolução da Obra (%)" error={errors.percentualObra?.message}>
               <input {...register('percentualObra')} type="number" min={0} max={100} className={input()} placeholder="65" />
