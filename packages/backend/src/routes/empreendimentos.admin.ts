@@ -255,23 +255,49 @@ export async function empreendimentosAdminRoutes(app: FastifyInstance) {
       return reply.status(400).send({ message: 'Limite de 20 fotos atingido.' })
     }
 
+    // Cada foto é tratada de forma independente: as que subirem são salvas,
+    // as que falharem voltam listadas em `falhas` pro admin reenviar só elas.
+    // Antes, uma falha no meio do lote derrubava a requisição inteira e
+    // deixava as fotos já enviadas órfãs no MinIO.
     const parts = request.files()
     const novasUrls: string[] = []
+    const falhas: { arquivo: string; motivo: string }[] = []
+    let falhaStorage = false
 
     for await (const part of parts) {
-      if (!ACCEPTED_MIMETYPES.includes(part.mimetype)) {
-        return reply.status(400).send({ message: `Formato não aceito: ${part.mimetype}` })
+      if (fotosAtual.length + novasUrls.length >= 20) {
+        falhas.push({ arquivo: part.filename, motivo: 'Limite de 20 fotos atingido.' })
+        part.file.resume() // descarta o stream pra não travar o multipart
+        continue
       }
-      const buffer = await part.toBuffer()
-      const url = await uploadFoto(id, part.filename, buffer, part.mimetype)
-      novasUrls.push(url)
+      if (!ACCEPTED_MIMETYPES.includes(part.mimetype)) {
+        falhas.push({ arquivo: part.filename, motivo: `Formato não aceito: ${part.mimetype}` })
+        part.file.resume()
+        continue
+      }
+      try {
+        const buffer = await part.toBuffer()
+        novasUrls.push(await uploadFoto(id, part.filename, buffer, part.mimetype))
+      } catch (err) {
+        request.log.error({ err, arquivo: part.filename }, 'Falha ao enviar foto pro MinIO')
+        falhas.push({ arquivo: part.filename, motivo: 'Falha ao gravar no armazenamento.' })
+        falhaStorage = true
+      }
     }
 
-    const updated = await prisma.empreendimento.update({
-      where: { id },
-      data: { fotos: [...fotosAtual, ...novasUrls] },
-    })
-    return reply.send(fixUrls(updated))
+    if (novasUrls.length === 0 && falhas.length > 0) {
+      return reply
+        .status(falhaStorage ? 502 : 400)
+        .send({ message: 'Nenhuma foto foi enviada.', falhas })
+    }
+
+    const updated = novasUrls.length > 0
+      ? await prisma.empreendimento.update({
+          where: { id },
+          data: { fotos: [...fotosAtual, ...novasUrls] },
+        })
+      : existing
+    return reply.send({ ...fixUrls(updated), falhas })
   })
 
   // POST /api/admin/empreendimentos/:id/pdf

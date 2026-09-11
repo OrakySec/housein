@@ -47,8 +47,14 @@ services:
     command: server /data --console-address ":9001"
     restart: always
     networks:
-      - internal
-      - YkaroNET
+      # A YkaroNET é compartilhada com outros stacks do servidor, e o nome
+      # curto "minio" colide com o serviço "minio" deles — o DNS do Docker
+      # passa a alternar entre os dois. O alias único abaixo evita isso;
+      # backend e minio-init devem usar "housein-minio", nunca "minio".
+      internal:
+        aliases:
+          - housein-minio
+      YkaroNET:
     deploy:
       labels:
         - "traefik.enable=true"
@@ -66,13 +72,18 @@ services:
     entrypoint: >
       /bin/sh -c "
         sleep 5;
-        mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY};
+        mc alias set local http://housein-minio:9000 ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY};
         mc mb --ignore-existing local/empreendimentos;
         mc anonymous set download local/empreendimentos;
         echo 'MinIO pronto.';
       "
     networks:
       - internal
+    deploy:
+      # job de inicialização: roda uma vez e para. Sem isso o Swarm fica
+      # recriando o container em loop mesmo depois de ele sair com código 0.
+      restart_policy:
+        condition: on-failure
 
   # ─── Backend (Fastify) ────────────────────────────────────────
   backend:
@@ -87,7 +98,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       REDIS_URL: redis://redis:6379
       JWT_SECRET: ${JWT_SECRET}
-      MINIO_ENDPOINT: minio
+      MINIO_ENDPOINT: housein-minio
       MINIO_PORT: "9000"
       MINIO_USE_SSL: "false"
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}

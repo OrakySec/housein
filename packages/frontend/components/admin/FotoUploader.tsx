@@ -27,8 +27,20 @@ export function FotoUploader({ empreendimentoId, fotos, onChange }: Props) {
         { headers: { 'Content-Type': 'multipart/form-data' } }
       )
       onChange(res.data.fotos as string[])
-    } catch {
-      alert('Erro ao enviar foto.')
+      const falhas = (res.data.falhas ?? []) as { arquivo: string; motivo: string }[]
+      if (falhas.length > 0) {
+        alert(
+          `${falhas.length} foto(s) não foram enviadas — tente reenviar só essas:\n` +
+          falhas.map(f => `• ${f.arquivo}: ${f.motivo}`).join('\n')
+        )
+      }
+    } catch (err: any) {
+      const data = err?.response?.data
+      const falhas = (data?.falhas ?? []) as { arquivo: string; motivo: string }[]
+      alert(
+        (data?.message ?? 'Erro ao enviar foto.') +
+        (falhas.length ? '\n' + falhas.map(f => `• ${f.arquivo}: ${f.motivo}`).join('\n') : '')
+      )
     } finally {
       setUploading(false)
     }
