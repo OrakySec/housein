@@ -1,8 +1,26 @@
 import * as Minio from 'minio'
 import slugify from 'slugify'
+import sharp from 'sharp'
 
 const BUCKET = process.env.MINIO_BUCKET || 'empreendimentos'
 const PUBLIC_URL = process.env.MINIO_PUBLIC_URL || 'http://localhost:9000'
+
+/**
+ * Redimensiona e comprime a imagem antes de subir pro MinIO.
+ * Fotos de celular vêm com 5-12MB+, e sem essa compressão o Next.js
+ * precisa otimizar essas imagens gigantes sob demanda no /_next/image,
+ * o que trava o processo do frontend quando várias carregam juntas
+ * (ex: galeria com 10 fotos). Normaliza tudo pra JPEG, no máximo
+ * 2200px no lado maior, qualidade 82 — reduz pra uma fração do tamanho
+ * original sem perda visível pra web.
+ */
+async function compressImage(buffer: Buffer): Promise<Buffer> {
+  return sharp(buffer)
+    .rotate() // aplica a orientação EXIF antes de descartar os metadados
+    .resize({ width: 2200, height: 2200, fit: 'inside', withoutEnlargement: true })
+    .jpeg({ quality: 82, mozjpeg: true })
+    .toBuffer()
+}
 
 let client: Minio.Client | null = null
 let bucketReady = false
@@ -49,13 +67,13 @@ export async function uploadFoto(
 ): Promise<string> {
   await ensureBucket()
   const minio = getClient()
+  const compressed = await compressImage(buffer)
   const safeName = slugify(filename.replace(/\.[^/.]+$/, ''), { lower: true, strict: true })
-  const ext = filename.split('.').pop()
-  // objectName NÃO inclui o bucket — a URL pública já o insere via /${BUCKET}/
-  const objectName = `${empreendimentoId}/${Date.now()}-${safeName}.${ext}`
+  // saída sempre normalizada pra .jpg, independente do formato original
+  const objectName = `${empreendimentoId}/${Date.now()}-${safeName}.jpg`
 
-  await minio.putObject(BUCKET, objectName, buffer, buffer.length, {
-    'Content-Type': mimetype,
+  await minio.putObject(BUCKET, objectName, compressed, compressed.length, {
+    'Content-Type': 'image/jpeg',
   })
 
   return `${PUBLIC_URL}/${BUCKET}/${objectName}`
@@ -104,10 +122,10 @@ export async function uploadFotoLocalizacao(
 ): Promise<string> {
   await ensureBucket()
   const minio = getClient()
-  const ext = filename.split('.').pop() || 'jpg'
-  const objectName = `${empreendimentoId}/localizacao-${Date.now()}.${ext}`
-  await minio.putObject(BUCKET, objectName, buffer, buffer.length, {
-    'Content-Type': mimetype,
+  const compressed = await compressImage(buffer)
+  const objectName = `${empreendimentoId}/localizacao-${Date.now()}.jpg`
+  await minio.putObject(BUCKET, objectName, compressed, compressed.length, {
+    'Content-Type': 'image/jpeg',
   })
   return `${PUBLIC_URL}/${BUCKET}/${objectName}`
 }
