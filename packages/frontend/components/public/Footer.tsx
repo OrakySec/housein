@@ -114,19 +114,19 @@ export function Footer() {
               © HouseIN Incorporações · Todos os direitos reservados
             </span>
           </div>
-          <a 
-            href="https://www.instagram.com/oykaromarques.ia/" 
-            target="_blank" 
+          <a
+            href="https://www.instagram.com/bry.marketing/"
+            target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-4 group relative overflow-hidden px-4 py-2 rounded-xl transition-all duration-300 hover:bg-slate-50"
+            className="flex items-center gap-3 group relative overflow-hidden px-4 py-2 rounded-xl transition-all duration-300 hover:bg-slate-50"
           >
             <span className="font-serif italic text-xs md:text-sm text-slate-500">Desenvolvido por</span>
-            <Image 
-              src="/assinatura.png" 
-              alt="Assinatura" 
+            <Image
+              src="/bry-marketing.webp"
+              alt="BRY Marketing"
               width={100}
-              height={48}
-              className="h-8 md:h-10 w-auto object-contain brightness-0 opacity-70 group-hover:opacity-100 transition-opacity" 
+              height={100}
+              className="h-8 w-8 md:h-10 md:w-10 object-contain rounded-lg opacity-90 group-hover:opacity-100 transition-opacity"
             />
           </a>
         </div>
