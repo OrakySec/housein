@@ -83,7 +83,7 @@ export function Navbar() {
           <div className="flex items-center gap-4 md:gap-5">
             {/* WhatsApp Atendimento Online */}
             <a
-              href="https://wa.me/5581984008353"
+              href="https://wa.me/5581999954288"
               target="_blank"
               rel="noopener noreferrer"
               className={`hidden sm:flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-xs font-sans font-semibold transition-all duration-300 ${
